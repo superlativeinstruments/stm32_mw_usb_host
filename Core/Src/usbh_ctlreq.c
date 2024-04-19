@@ -444,12 +444,6 @@ static USBH_StatusTypeDef USBH_ParseCfgDesc(USBH_HandleTypeDef *phost, uint8_t *
 
   pdesc = (USBH_DescHeader_t *)(void *)buf;
 
-  /* Make sure that the Configuration descriptor's bLength is equal to USB_CONFIGURATION_DESC_SIZE */
-  if (pdesc->bLength != USB_CONFIGURATION_DESC_SIZE)
-  {
-    pdesc->bLength = USB_CONFIGURATION_DESC_SIZE;
-  }
-
   /* Parse configuration descriptor */
   cfg_desc->bLength             = *(uint8_t *)(buf + 0U);
   cfg_desc->bDescriptorType     = *(uint8_t *)(buf + 1U);
@@ -470,12 +464,6 @@ static USBH_StatusTypeDef USBH_ParseCfgDesc(USBH_HandleTypeDef *phost, uint8_t *
       pdesc = USBH_GetNextDesc((uint8_t *)(void *)pdesc, &ptr);
       if (pdesc->bDescriptorType == USB_DESC_TYPE_INTERFACE)
       {
-        /* Make sure that the interface descriptor's bLength is equal to USB_INTERFACE_DESC_SIZE */
-        if (pdesc->bLength != USB_INTERFACE_DESC_SIZE)
-        {
-          pdesc->bLength = USB_INTERFACE_DESC_SIZE;
-        }
-
         pif = &cfg_desc->Itf_Desc[if_ix];
         USBH_ParseInterfaceDesc(pif, (uint8_t *)(void *)pdesc);
 
@@ -497,12 +485,6 @@ static USBH_StatusTypeDef USBH_ParseCfgDesc(USBH_HandleTypeDef *phost, uint8_t *
               {
                 pdesc->bLength = 0x09U;
               }
-            }
-            /* Make sure that the endpoint descriptor's bLength is equal to
-               USB_ENDPOINT_DESC_SIZE for all other endpoints types */
-            else
-            {
-              pdesc->bLength = USB_ENDPOINT_DESC_SIZE;
             }
 
             pep = &cfg_desc->Itf_Desc[if_ix].Ep_Desc[ep_ix];
